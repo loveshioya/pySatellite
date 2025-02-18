@@ -1,0 +1,51 @@
+Traceback (most recent call last):
+  File "/home/jmiyamoto2626/work/work_satellite/pySatellite/myvenv/lib/python3.13/site-packages/urllib3/response.py", line 754, in _error_catcher
+    yield
+  File "/home/jmiyamoto2626/work/work_satellite/pySatellite/myvenv/lib/python3.13/site-packages/urllib3/response.py", line 900, in _raw_read
+    raise IncompleteRead(self._fp_bytes_read, self.length_remaining)
+urllib3.exceptions.IncompleteRead: IncompleteRead(1321222536 bytes read, 64201032 more expected)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/jmiyamoto2626/work/work_satellite/pySatellite/myvenv/lib/python3.13/site-packages/requests/models.py", line 820, in generate
+    yield from self.raw.stream(chunk_size, decode_content=True)
+  File "/home/jmiyamoto2626/work/work_satellite/pySatellite/myvenv/lib/python3.13/site-packages/urllib3/response.py", line 1066, in stream
+    data = self.read(amt=amt, decode_content=decode_content)
+  File "/home/jmiyamoto2626/work/work_satellite/pySatellite/myvenv/lib/python3.13/site-packages/urllib3/response.py", line 983, in read
+    data = self._raw_read(amt)
+  File "/home/jmiyamoto2626/work/work_satellite/pySatellite/myvenv/lib/python3.13/site-packages/urllib3/response.py", line 878, in _raw_read
+    with self._error_catcher():
+         ~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/home/jmiyamoto2626/work/work_satellite/pySatellite/myvenv/lib/python3.13/site-packages/urllib3/response.py", line 778, in _error_catcher
+    raise ProtocolError(arg, e) from e
+urllib3.exceptions.ProtocolError: ('Connection broken: IncompleteRead(1321222536 bytes read, 64201032 more expected)', IncompleteRead(1321222536 bytes read, 64201032 more expected))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/jmiyamoto2626/work/work_satellite/pySatellite/InSAR_sample.py", line 158, in <module>
+    save_file(dataset_id, data_list, file_id_list)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jmiyamoto2626/work/work_satellite/pySatellite/InSAR_sample.py", line 156, in save_file
+    f.write(requests.get(dl_url).content)
+            ~~~~~~~~~~~~^^^^^^^^
+  File "/home/jmiyamoto2626/work/work_satellite/pySatellite/myvenv/lib/python3.13/site-packages/requests/api.py", line 73, in get
+    return request("get", url, params=params, **kwargs)
+  File "/home/jmiyamoto2626/work/work_satellite/pySatellite/myvenv/lib/python3.13/site-packages/requests/api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jmiyamoto2626/work/work_satellite/pySatellite/myvenv/lib/python3.13/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/jmiyamoto2626/work/work_satellite/pySatellite/myvenv/lib/python3.13/site-packages/requests/sessions.py", line 746, in send
+    r.content
+  File "/home/jmiyamoto2626/work/work_satellite/pySatellite/myvenv/lib/python3.13/site-packages/requests/models.py", line 902, in content
+    self._content = b"".join(self.iter_content(CONTENT_CHUNK_SIZE)) or b""
+                    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jmiyamoto2626/work/work_satellite/pySatellite/myvenv/lib/python3.13/site-packages/requests/models.py", line 822, in generate
+    raise ChunkedEncodingError(e)
+requests.exceptions.ChunkedEncodingError: ('Connection broken: IncompleteRead(1321222536 bytes read, 64201032 more expected)', IncompleteRead(1321222536 bytes read, 64201032 more expected))
+(myvenv) jmiyamoto2626@penguin:~/work/work_satellite/pySatellite$ 
