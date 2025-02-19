@@ -219,7 +219,7 @@ def save_file(dataset_id, data_id_list, files_list):
                     f.write(chunk)
                     f.flush()
         print(f'download_url(done)')
-        if(1):
+        if(0):
             return
 
 save_file(dataset_id, data_list, file_id_list)
