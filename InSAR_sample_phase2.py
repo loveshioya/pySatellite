@@ -174,21 +174,26 @@ for data_name in data_names:
     off_row = min(pl[2], pl[3])
     
     # ピクセル値を調整して強度・位相画像を出力
+    rotate_count = 0
     sigma, phase = gen_img(fpimg, off_col-200, 1000, off_row-300, 1000)
-    sigma = np.rot90(sigma, k=3)
-    sigma = np.rot90(sigma, k=-1)
     sigma = np.fliplr(sigma)  # 画像が反転しているため
-    phase = np.rot90(phase, k=3)
-    phase = np.rot90(phase, k=-1)
+    sigma = np.rot90(sigma, k=rotate_count)
+    #sigma = np.rot90(sigma, k=-1)
     phase = np.fliplr(phase)  # 画像が反転しているため
+    phase = np.rot90(phase, k=rotate_count)
+    #phase = np.rot90(phase, k=-1)
 
     # 強度画像(sigma)と位相画像(phase)をそれぞれグレースケールとjetカラーマップで表示
     plt.imsave('sigma_{}.jpg'.format(data_name), sigma, cmap = "gray")
     plt.imsave('phase_{}.jpg'.format(data_name), phase, cmap = "jet")
     np.save('sigma_{}.npy'.format(data_name), sigma)
     np.save('phase_{}.npy'.format(data_name), phase)
+    cv2.imshow("sigma",sigma)
+    cv2.waitKey(0)
+    #exit()
 
 print("#--------------------------------")
 print("finished")
+cv2.destroyAllWindows()
 exit()
 

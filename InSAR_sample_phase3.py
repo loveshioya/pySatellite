@@ -216,17 +216,30 @@ def get_ifgm(data_A, data_B, AB):
  
     phase1 = np.load(file_name_phase.format(data_A))
     phase2 = np.load(file_name_phase.format(data_B))
-    print(sigma1.shape)
-    print(sigma2.shape)
-    if(1):
+    print(f'{data_A}:{sigma1.shape},{phase1.shape}')
+    print(f'{data_B}:{sigma2.shape},{phase2.shape}')
+    min_y = min(sigma1.shape[0] , sigma2.shape[0])
+    min_x = min(sigma1.shape[1] , sigma2.shape[1])
+    print(f'({min_y},{min_x})')
+    if(0):
        return
  
-    coreg_phase2, coreg_phase1 = coregistration(sigma1, sigma2, phase1, phase2)
+    # crop min-size
+    sigma1_crop = sigma1[0:min_y , 0:min_x]
+    phase1_crop = phase1[0:min_y , 0:min_x]
+    sigma2_crop = sigma2[0:min_y , 0:min_x]
+    phase2_crop = phase2[0:min_y , 0:min_x]
+    print(f'croped:{sigma1_crop.shape},{phase1_crop.shape},{sigma2_crop.shape},{phase2_crop.shape}')
+    #coreg_phase2, coreg_phase1 = coregistration(sigma1, sigma2, phase1, phase2)
+    coreg_phase2, coreg_phase1 = coregistration(sigma1_crop, sigma2_crop, phase1_crop, phase2_crop)
     # 位相画像の差分を、[-π~+π]にラップする
     ifgm = wraptopi(coreg_phase2 - coreg_phase1)
  
     np.save('ifgm{}.npy'.format(AB), ifgm)
     plt.imsave('ifgm{}.jpg'.format(AB), ifgm, cmap = "jet")
+    cv2.imshow("ifgm",ifgm)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
     return
 
 # 干渉処理の実行
