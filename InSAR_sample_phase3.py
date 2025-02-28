@@ -183,25 +183,34 @@ def coregistration(A,B,C,D):
     if dx < 0 and dy >= 0:
         dx = math.ceil(dx)-1
         dy = math.ceil(dy)
+        rB = B[dy:py,0:px+dx]
+        rA = A[dy:py,0:px+dx]
         rD = D[dy:py,0:px+dx]
         rC = C[dy:py,0:px+dx]
     elif dx < 0 and dy < 0:
         dx = math.ceil(dx)-1
         dy = math.ceil(dy)-1
+        rB = B[0:py+dy,0:px+dx]
+        rA = A[0:py+dy,0:px+dx]
         rD = D[0:py+dy,0:px+dx]
         rC = C[0:py+dy,0:px+dx]
     elif dx >= 0 and dy < 0:
         dx = math.ceil(dx)
         dy = math.ceil(dy)-1
+        rB = B[0:py+dy,dx:px]
+        rA = A[0:py+dy,dx:px]
         rD = D[0:py+dy,dx:px]
         rC = C[0:py+dy,dx:px]
     elif dx >= 0 and dy >= 0:
         dx = math.ceil(dx)
         dy = math.ceil(dy)-1
+        rB = B[dy:py,dx:px]
+        rA = A[dy:py,dx:px]
         rD = D[dy:py,dx:px]
         rC = C[dy:py,dx:px]
  
-    return rC, rD
+    return rA, rB, rC, rD
+    #return rC, rD
  
 def wraptopi(delta_phase):
     # 値の範囲が、[-π~+π] – [-π~+π] = [-2π~+2π]となるので、それを[-π~+π]に戻す（ラップする）
@@ -231,7 +240,18 @@ def get_ifgm(data_A, data_B, AB):
     phase2_crop = phase2[0:min_y , 0:min_x]
     print(f'croped:{sigma1_crop.shape},{phase1_crop.shape},{sigma2_crop.shape},{phase2_crop.shape}')
     #coreg_phase2, coreg_phase1 = coregistration(sigma1, sigma2, phase1, phase2)
-    coreg_phase2, coreg_phase1 = coregistration(sigma1_crop, sigma2_crop, phase1_crop, phase2_crop)
+    #coreg_phase2, coreg_phase1 = coregistration(sigma1_crop, sigma2_crop, phase1_crop, phase2_crop)
+    coreg_sigma1, coreg_sigma2,coreg_phase1, coreg_phase2 = coregistration(sigma1_crop, sigma2_crop, phase1_crop, phase2_crop)
+    diff_sigma1_2 = coreg_sigma1 - coreg_sigma2
+    diff_sigma2_1 = coreg_sigma2 - coreg_sigma1
+    if(1):
+        cv2.imshow("coreg_sigma1",coreg_sigma1)
+        cv2.imshow("coreg_sigma2",coreg_sigma2)        
+        cv2.imshow("diff_sigma1_2",diff_sigma1_2)
+        cv2.imshow("diff_sigma2_1",diff_sigma2_1)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+       
     # 位相画像の差分を、[-π~+π]にラップする
     ifgm = wraptopi(coreg_phase2 - coreg_phase1)
  
